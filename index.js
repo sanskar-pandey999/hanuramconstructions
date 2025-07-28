@@ -125,6 +125,16 @@ const UserAccount = mongoose.model('UserAccount', UserAccountSchema); // Creates
 
 // --- Routes ---
 
+
+// Add this route *after* your app.use(express.static(...))
+// but *before* other specific app.get("/html/...") routes
+
+app.get("/", (req, res) => {
+    console.log("GET / requested. Serving home.html");
+    res.sendFile(path.join(__dirname, "html", "home.html"));
+});
+
+
 // GET route for the main home page
 app.get("/html/home.html", (req, res) => {
     console.log("GET /html/home.html requested.");
