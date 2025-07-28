@@ -72,6 +72,7 @@
                 </div>
             </div>
         </section>
+        
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 let index = 0; // To keep track of which content is displayed
@@ -127,8 +128,68 @@
 
                 // Change content every 6 seconds
                 setInterval(changeContent, 6000);
+
+                // --- Mobile Menu Toggle JavaScript ---
+                const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+                const navMenu = document.querySelector('#menu ul'); // Selects the <ul> inside #menu
+
+                if (mobileMenuToggle && navMenu) {
+                    mobileMenuToggle.addEventListener('click', () => {
+                        console.log('Mobile menu toggle clicked!'); // For debugging
+                        navMenu.classList.toggle('active'); // Toggles 'active' class on the <ul>
+                        mobileMenuToggle.classList.toggle('active'); // Optional: Add active class to button for styling
+                    });
+                } else {
+                    console.error('Mobile menu toggle or navigation menu not found!');
+                }
             });
         </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', async () => {
+                const userStatusContainer = document.getElementById('user-status-container');
+
+                try {
+                    const response = await fetch('/api/user-status'); // Your backend API endpoint
+                    const data = await response.json();
+
+                    if (data.loggedIn) {
+                        // If logged in, display user's name and a logout button
+                        userStatusContainer.innerHTML = `
+                            <span class="writingone">Welcome, ${data.name}!</span>
+                            <button id="logoutBtn" class="writingone" style="margin-left: 10px; padding: 5px 10px; background-color: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer;">Logout</button>
+                        `;
+
+                        // Add event listener to the logout button
+                        document.getElementById('logoutBtn').addEventListener('click', async () => {
+                            const logoutResponse = await fetch('/api/logout', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            });
+                            const logoutData = await logoutResponse.json();
+                            if (logoutResponse.ok) {
+                                alert(logoutData.message);
+                                window.location.reload(); // Reload the page to update UI after logout
+                            } else {
+                                alert('Logout failed: ' + logoutData.message);
+                            }
+                        });
+                    } else {
+                        // If not logged in, display the "Userid" link as before
+                        userStatusContainer.innerHTML = `
+                            <a class="writingone" href="/html/login.html">Userid</a> `;
+                    }
+                } catch (error) {
+                    console.error('Error fetching user status:', error);
+                    // Fallback to default "Userid" link if API call fails
+                    userStatusContainer.innerHTML = `
+                        <a class="writingone" href="/html/login.html">Userid</a> `;
+                }
+            });
+        </script>
+
 
         <section id="whatwedo">
             <h2>Crafting Excellence</h2>
@@ -183,50 +244,6 @@
         <p>&copy; 2025 Hanuram Construction. All rights reserved.</p>
     </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            const userStatusContainer = document.getElementById('user-status-container');
-
-            try {
-                const response = await fetch('/api/user-status'); // Your backend API endpoint
-                const data = await response.json();
-
-                if (data.loggedIn) {
-                    // If logged in, display user's name and a logout button
-                    userStatusContainer.innerHTML = `
-                        <span class="writingone">Welcome, ${data.name}!</span>
-                        <button id="logoutBtn" class="writingone" style="margin-left: 10px; padding: 5px 10px; background-color: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer;">Logout</button>
-                    `;
-
-                    // Add event listener to the logout button
-                    document.getElementById('logoutBtn').addEventListener('click', async () => {
-                        const logoutResponse = await fetch('/api/logout', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            }
-                        });
-                        const logoutData = await logoutResponse.json();
-                        if (logoutResponse.ok) {
-                            alert(logoutData.message);
-                            window.location.reload(); // Reload the page to update UI after logout
-                        } else {
-                            alert('Logout failed: ' + logoutData.message);
-                        }
-                    });
-                } else {
-                    // If not logged in, display the "Userid" link as before
-                    userStatusContainer.innerHTML = `
-                        <a class="writingone" href="/html/login.html">Userid</a> `;
-                }
-            } catch (error) {
-                console.error('Error fetching user status:', error);
-                // Fallback to default "Userid" link if API call fails
-                userStatusContainer.innerHTML = `
-                    <a class="writingone" href="/html/login.html">Userid</a> `;
-            }
-        });
-    </script>
 </body>
 
 </html>
