@@ -1,3 +1,4 @@
+require('dotenv').config(); // Load environment variables from .env file (for local development)
 const express = require("express");
 const fs = require("fs"); // Not directly used in the current version, but often helpful
 const path = require("path");
@@ -103,8 +104,8 @@ const UserAccountSchema = new mongoose.Schema({
 
 // Pre-save hook for UserAccountSchema to hash the password before saving a new user
 UserAccountSchema.pre('save', async function (next)
-// above line specifies before starting the  
- {
+// above line specifies before starting the
+    {
     if (this.isModified('password')) { // Only hash if the password field is new or modified
         try {
             this.password = await bcrypt.hash(this.password, 10); // Hashes password with 10 salt rounds
@@ -302,7 +303,7 @@ app.post("/home/login", async (req, res) => {
         console.log(`Login attempt for ${email}. User input password length: ${password.length}`);
         // Compare provided password with the hashed password from the database
 
-        
+
         const isMatch = await bcrypt.compare(password, user.password);
         console.log(`Password comparison result for ${email}: ${isMatch}`);
 
@@ -327,9 +328,11 @@ app.post("/home/login", async (req, res) => {
 console.log("4. Attempting to start server...");
 async function startServer() {
     try {
-        // Connect to MongoDB database named 'hrsample'
-        await mongoose.connect('mongodb://127.0.0.1:27017/hrsample');
-        console.log("✅ Connection Established to MongoDB: hrsample");
+        // Use an environment variable for the MongoDB URI, with a fallback for local development
+        const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/hrsample_local';
+
+        await mongoose.connect(MONGODB_URI);
+        console.log("✅ Connection Established to MongoDB: hrsample"); // This log might need adjustment for the dynamic name
 
         // Start the Express server
         app.listen(PORT, () => {
