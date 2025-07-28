@@ -1,0 +1,264 @@
+
+/* Basic Reset and Setup */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.6;
+    color: #ddd;
+    background-color: #222;
+    overflow-x: hidden;
+}
+
+/* Typography */
+.writingone {
+    font-family: "Bebas Neue", serif;
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: 0.5px;
+}
+
+h1,
+h2,
+h3 {
+    color: #eee;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+h2 {
+    font-size: 2.5rem;
+}
+
+h3 {
+    font-size: 1.8rem;
+    color: #ffab00;
+}
+
+/* Header and Navigation */
+header {
+    background-color: rgba(0, 0, 0, 0.9);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+#menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+}
+
+#logo img {
+    width: 50px;
+    height: 50px;
+    filter: invert(1) grayscale(100%) contrast(200%);
+}
+
+#menu ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+#menu ul li {
+    margin-left: 1.5rem;
+}
+
+#menu ul li a {
+    text-decoration: none;
+    color: #afafaf;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+}
+
+#menu ul li a:hover {
+    color: white;
+}
+
+#userid {
+    margin-left: auto !important;
+}
+
+#mobile-menu-toggle {
+    background: none;
+    color: #afafaf;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: none; /* Hide on larger screens */
+}
+
+/* Intro Section */
+#introsection {
+    position: relative;
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+}
+
+.intro-image-container {
+    position: relative;
+}
+
+.intro-image-container img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    max-height: 80vh;
+}
+
+.text-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    text-align: center;
+    padding: 2rem;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+}
+
+/* Motion and Motive Section */
+#motion {
+    padding: 4rem 2rem;
+}
+
+.motion-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+.motion-image {
+    flex: 1 1 300px;
+    max-width: 500px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.motion-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.motion-text {
+    flex: 1 1 400px;
+    text-align: left;
+}
+
+#imgboxpara {
+    margin-top: 1rem;
+}
+
+/* What We Do Section */
+#whatwedo {
+    padding: 4rem 2rem;
+}
+
+#whatwedobigbox {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.whatwedobox {
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease-in-out;
+}
+
+.whatwedobox:hover {
+    transform: translateY(-5px);
+}
+
+.whatwedobox .work {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    object-fit: cover;
+    max-height: 200px;
+}
+
+.whatwedoheading {
+    margin-bottom: 1rem;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #000;
+    color: #afafaf;
+    font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    html {
+        font-size: 15px;
+    }
+
+    #menu ul {
+        display: none; /* Hide on smaller screens */
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        padding: 1rem;
+        text-align: center;
+    }
+
+    #menu ul.open {
+        display: flex;
+    }
+
+    #menu ul li {
+        margin: 0.75rem 0;
+    }
+
+    #userid {
+        margin-left: 0 !important;
+    }
+
+    #mobile-menu-toggle {
+        display: block; /* Show on smaller screens */
+    }
+
+    .motion-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .motion-image {
+        max-width: 80}};

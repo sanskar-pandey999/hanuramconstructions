@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact us</title>
+
+    <link rel="stylesheet" href="/contactus.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Dancing+Script:wght@400..700&family=Fjalla+One&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Permanent+Marker&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+    <div id="contactbox" class="writingtwo">
+        <h3 class="writingtwo">Contact Us</h3>
+        <h6 class="writingtwo">Fill out the form below, and our team will contact you via mail or phone—whichever
+            preference you choose!
+        </h6>
+
+        <div id="formbox">
+            <!-- Form action and method updated to directly submit to the server's POST route -->
+            <form action="/home/contactus" method="POST"> 
+
+                <div class="formitems">
+                    <label for="inputname">Name:</label>
+                    <input class="inputb" type="text" name="name" id="inputname" placeholder="Enter Your Full Name"
+                        required>
+                </div>
+
+                <div class="formitems">
+                    <label for="inputemail">Email:</label>
+                    <input class="inputb" type="email" name="email" id="inputemail" placeholder="Enter Your Email ID"
+                        required>
+                </div>
+
+                <div class="formitems">
+                    <label for="Phone">Phone:</label>
+                    <input class="inputb" type="tel" name="phone" id="Phone" placeholder="Enter Your Mobile Number"
+                        required>
+                </div>
+
+                <div class="formitems">
+                    <label for="Address">Address:</label>
+                    <textarea name="address" id="Address" cols="50" rows="5" placeholder="Enter Your Address"
+                        required></textarea>
+                </div>
+
+                <div class="formitems">
+                    <label for="contactMethod">We should contact you through:</label>
+                    <!-- name attribute updated to match schema: contactPreference -->
+                    <!-- value attributes updated to match schema enum: 'Call me', 'Email me' -->
+                    <select name="contactPreference" id="contactMethod" required>
+                        <option value="Call me">Call me</option>
+                        <option value="Email me">Mail me</option>
+                    </select>
+                </div>
+
+                <div class="formitems">
+                    <label>Requirement:</label> <br>
+                    <!-- name attribute updated to match schema: requirementType -->
+                    <!-- value attributes updated to exactly match schema enum -->
+                    <input class="reqitems" type="radio" name="requirementType" value="Supervision and Management" required>
+                    Supervision and Management <br>
+
+                    <input class="reqitems" type="radio" name="requirementType" value="Flat/Bungalow in HR Society">
+                    Flat/Bungalow in HR Society <br>
+                    <input class="reqitems" type="radio" name="requirementType" value="Renovated Bungalow/Flat (HR)">
+                    Renovated Bungalow/Flat (HR) <br>
+                </div>
+
+                <div class="formitems">
+                    <label for="checked">Have you checked your details?</label>
+                    <!-- name attribute updated to match schema: detailsChecked -->
+                    <!-- value set to 'true' for boolean submission -->
+                    <input type="checkbox" name="detailsChecked" id="checked" value="true" required>
+                </div>
+
+                <div class="formitems">
+                    <button id="sub" type="submit">Submit</button>
+                </div>
+
+            </form>
+            <!-- The responseMessage div and the associated script are removed as direct form submission is used -->
+        </div>
+    </div>
+</body>
+
+</html>

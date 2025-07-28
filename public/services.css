@@ -1,0 +1,148 @@
+/* Basic Reset and Setup */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.6;
+    color: #ddd;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../static/lamp-6924294_640.jpg');
+    background-size: cover;
+    background-attachment: fixed; /* Optional: Keep the background fixed */
+    overflow-x: hidden;
+}
+
+/* Typography */
+.writingone {
+    font-family: "Bebas Neue", serif;
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: 0.5px;
+}
+
+h1,
+h2,
+h3 {
+    color: #eee;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+h2 {
+    font-size: 2.5rem;
+}
+
+h3 {
+    font-size: 1.8rem;
+    color: #ffab00;
+}
+
+/* Header and Navigation (Consistent with hrhome.css) */
+header {
+    background-color: rgba(0, 0, 0, 0.9);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+#menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+}
+
+#logo img {
+    width: 50px;
+    height: 50px;
+    filter: invert(1) grayscale(100%) contrast(200%);
+}
+
+#menu ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+#menu ul li {
+    margin-left: 1.5rem;
+}
+
+#menu ul li a {
+    text-decoration: none;
+    color: #afafaf;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+}
+
+#menu ul li a:hover {
+    color: white;
+}
+
+#userid {
+    margin-left: auto !important;
+}
+
+#mobile-menu-toggle {
+    background: none;
+    color: #afafaf;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: none; /* Hide on larger screens */
+}
+
+/* Services Page Styles */
+#services-page {
+    padding: 4rem 2rem;
+}
+
+.services-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.service-card {
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease-in-out;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+}
+
+.service-heading {
+    margin-bottom: 1rem;
+    color: #ffab00;
+}
+
+.service-description {
+    margin-bottom: 1.5rem;
+}
+
+.service-link {
+    display: inline-block;
+    background-color: #ffab00;
+    color: black;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color}

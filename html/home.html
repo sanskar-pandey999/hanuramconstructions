@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hanuram Construction</title>
+    <link rel="stylesheet" href="/home.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Dancing+Script:wght@400..700&family=Fjalla+One&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Permanent+Marker&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+
+    <header>
+        <nav id="menu">
+            <div id="logo">
+                <img src="/static/Adobe Express - file.png" alt="Hanuram Construction Logo">
+            </div>
+            <ul>
+                <li><a class="writingone" href="/html/home.html">Home</a></li>
+                <li><a class="writingone" href="/html/about.html">About</a></li>
+                <li><a class="writingone" href="/html/services.html">Services</a></li>
+                <li><a class="writingone" href="/html/contactus.html" target="_blank">Contact</a></li>
+                <li id="user-status-container">
+                    <a class="writingone" href="/html/login.html">Userid</a> </li>
+            </ul>
+            <button id="mobile-menu-toggle" aria-label="Toggle Mobile Menu">
+                <i class="fa fa-bars"></i>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <section id="introsection">
+            <div class="intro-image-container">
+                <img src="/static/architecture-6517841_640.jpg" alt="Modern Building">
+                <div class="text-overlay">Building Dreams, One Brick at a Time.</div>
+            </div>
+        </section>
+
+        <section id="motion">
+            <h2>Motive and Motion</h2>
+            <div class="motion-content">
+                <div class="motion-image">
+                    <img id="images" src="/static/architecture-789636_640.jpg" alt="Architectural Design">
+                </div>
+                <div class="motion-text">
+                    <h3 id="imgboxtext">
+                        Crafting Awe-Inspiring Structures, Shaping Tomorrow's Heritage
+                    </h3>
+                    <p id="imgboxpara">
+                        At Hanuram Construction, we don’t just build structures; we create legacies that stand the test of
+                        time. Inspired by the grandeur of historic masterpieces like the Taj Mahal and ancient monuments,
+                        our vision is to construct buildings that will awe and inspire for centuries to come. With each
+                        project, we are not just laying foundations – we are shaping landmarks that future generations will
+                        marvel at, ensuring that the magnificence of today becomes the heritage of tomorrow.
+                        <br><br>
+                        At Hanuram Construction, our passion for excellence drives us to blend artistry with engineering,
+                        crafting structures that transcend time. Drawing inspiration from the architectural wonders of the
+                        past, we infuse every project with a commitment to durability, beauty, and innovation. We believe
+                        that every building should tell a story—one of ambition, craftsmanship, and a vision for the future.
+                        By combining tradition with cutting-edge technology, we create spaces that are not only functional
+                        but also timeless, leaving behind a legacy that will inspire generations to come
+                    </p>
+                </div>
+            </div>
+        </section>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                let index = 0; // To keep track of which content is displayed
+
+                // Array of text descriptions
+                const imgboxtext = [
+                    "Crafting Awe-Inspiring Structures, Shaping Tomorrow's Heritage",
+                    "Innovating Today, Inspiring Tomorrow",
+                    "Building Dreams, One Structure at a Time",
+                    "Designing Excellence, Constructing the Future"
+                ];
+
+                // Array of detailed paragraphs (Each around 400 words)
+                const imgboxpara = [
+                    `Architecture is more than just constructing buildings; it is an art that shapes societies, influences cultures, and defines histories. From ancient civilizations to modern metropolises, architecture has played a fundamental role in human progress. The fusion of form and function is what makes architecture unique, ensuring that buildings are not only aesthetically pleasing but also practical, durable, and sustainable. Architects today leverage advanced technologies and innovative materials to push the boundaries of design. Concepts like green architecture and smart cities are transforming the way we perceive built environments. With an emphasis on sustainability, architects are designing spaces that reduce energy consumption and carbon footprints, paving the way for a more environmentally responsible future. Every structure tells a story, reflecting the visions, aspirations, and creativity of those who design and build them. As we continue to innovate, architecture will remain at the heart of shaping tomorrow's heritage, leaving behind a legacy of human ingenuity and progress.`,
+
+                    `Every building starts with a vision—a dream translated into reality through engineering, craftsmanship, and innovation. Architecture is not merely about erecting structures; it is about creating spaces that inspire, comfort, and endure. Throughout history, architectural marvels have symbolized progress, from the Great Pyramids to modern skyscrapers that touch the clouds. Today's architects are blending tradition with cutting-edge technology, utilizing sustainable materials and energy-efficient designs to meet the demands of an evolving world. With increasing urbanization, smart cities are emerging as the future, integrating artificial intelligence and automation into infrastructure for a seamless living experience. The construction industry is witnessing a transformation where 3D printing, prefabrication, and modular designs accelerate project timelines and reduce costs. As we move forward, the role of architects will be crucial in shaping a resilient and sustainable built environment that harmonizes with nature while meeting the needs of future generations.`,
+
+                    `Innovation is the driving force behind architectural excellence. From ancient stone structures to futuristic skyscrapers, the built environment has constantly evolved to meet human needs. Modern architects are embracing new technologies, including artificial intelligence, parametric design, and robotic construction, to redefine architectural possibilities. The emphasis on sustainability has led to the rise of eco-friendly architecture, where materials like recycled concrete, bio-based composites, and energy-efficient glass are gaining popularity. Smart homes, adaptive buildings, and self-sustaining structures are setting new benchmarks in design. As the global population grows, urban planners are focusing on vertical cities and mixed-use developments that optimize space and resources. The challenge lies in balancing aesthetics, function, and environmental responsibility to create spaces that enhance the quality of life. As architecture continues to evolve, its impact on society will remain profound, shaping the way people live, work, and interact with the built world around them.`,
+
+                    `Great architecture is a blend of creativity, engineering, and sustainability. It defines skylines, creates communities, and influences cultures. The modern era is witnessing a shift toward smarter, greener, and more resilient buildings, integrating cutting-edge technology with time-tested architectural principles. Architects are designing climate-responsive structures that harness renewable energy, reduce waste, and promote sustainable living. Urbanization is leading to innovative solutions like floating cities, vertical forests, and modular housing, which address space constraints and environmental concerns. Digital tools such as Building Information Modeling (BIM) are revolutionizing the way architects and engineers collaborate, streamlining the design and construction process. As society evolves, so does architecture, continually pushing boundaries to redefine the future of human habitats. Through innovation and visionary thinking, architecture will remain a cornerstone of progress, shaping cities and communities for generations to come.`
+                ];
+
+                // Array of image sources
+                const images = [
+                    "/static/architecture-4795667_640.jpg",
+                    "/static/architecture-6517841_640.jpg",
+                    "/static/architecture-6517841_640.jpg",
+                    "/static/city development.jpg"
+                ];
+
+                function changeContent() {
+                    // Get elements
+                    const textElement = document.getElementById("imgboxtext");
+                    const paraElement = document.getElementById("imgboxpara");
+                    const imageElement = document.getElementById("images");
+
+                    // Check if elements exist
+                    if (!textElement || !imageElement || !paraElement) {
+                        console.error("Error: One or more elements not found!");
+                        return;
+                    }
+
+                    // Update index for the next item
+                    index = (index + 1) % imgboxtext.length;
+
+                    // Update Text, Paragraph, and Image
+                    textElement.innerText = imgboxtext[index];
+                    paraElement.innerText = imgboxpara[index];
+                    imageElement.src = images[index];
+                    imageElement.alt = `Image ${index + 1}`;
+                }
+
+                // Change content every 6 seconds
+                setInterval(changeContent, 6000);
+            });
+        </script>
+
+        <section id="whatwedo">
+            <h2>Crafting Excellence</h2>
+            <div id="whatwedobigbox">
+                <article class="whatwedobox">
+                    <img class="work" src="/static/painter-9124056_1280.jpg" alt="Renovated Residential">
+                    <h3 class="whatwedoheading">Renovated Residentials</h3>
+                    <div>We offer a unique opportunity for individuals to purchase properties on behalf of our company,
+                        earning commissions for successful transactions. Our company representative carefully assesses the
+                        neighborhood, market trends, and potential profitability before acquiring any property. <br><br>
+                        Once listed on our website, the highest bidder secures the sales rights and a commission. Upon
+                        acquisition, our interior designer begins work immediately. If we secure a net profit before
+                        renovations, buyers will have the option to customize the property according to their vision with
+                        the help of our expert team. However, if profits are unsatisfactory, we will renovate the property
+                        before putting it up for sale.<br><br>
+                        Additionally, buyers of these exclusive properties will receive a special membership card, granting
+                        them free entry into our society complexes. Their names and photos will be featured on our website,
+                        recognizing them as valued members of our community.
+                    </div>
+                </article>
+                <article class="whatwedobox">
+                    <img class="work" src="/static/ai-generated-8298892_1280.jpg" alt="Constructed Residential">
+                    <h3 class="whatwedoheading">Constructed Residentials</h3>
+                    <div>We specialize in turning your vision of a dream home into reality, starting from the ground up,
+                        with minimal upfront investment. Our unique approach begins with a comprehensive consultation via
+                        video calls, where our expert engineers and architects collaborate with you to design a personalized
+                        residential building tailored to your pre-owned land. We handle every stage of the process, from
+                        budget determination and blueprint creation to obtaining necessary permits, all managed by our
+                        experienced site supervisors and civil engineers. We seamlessly integrate essential utilities like plumbing, electrical, and HVAC
+                        systems, followed by insulation, drywall, and interior finishing, including painting, flooring, and
+                        fixture installation. Finally, we handle final inspections, secure your certificate of occupancy,
+                        and prepare your home for your move-in, delivering a complete, stress-free construction experience.
+                    </div>
+                </article>
+                <article class="whatwedobox">
+                    <img class="work" src="/static/building.jpg" alt="Society Residential">
+                    <h3 class="whatwedoheading">Society Residentials</h3>
+                    <div>Hanuram Construction is transforming real estate by developing self-sustaining societies where
+                        homeowners earn alongside the community. We begin by securing investors and acquiring land, followed
+                        by designing a market-ready housing plan with estimated costs to attract early buyers.
+                        <br><br>
+                        Homeowners can pre-book houses with advance payments, which fund construction along with investor
+                        contributions. While the exterior design remains uniform, owners can fully customize interiors,
+                        including layouts,
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Hanuram Construction. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const userStatusContainer = document.getElementById('user-status-container');
+
+            try {
+                const response = await fetch('/api/user-status'); // Your backend API endpoint
+                const data = await response.json();
+
+                if (data.loggedIn) {
+                    // If logged in, display user's name and a logout button
+                    userStatusContainer.innerHTML = `
+                        <span class="writingone">Welcome, ${data.name}!</span>
+                        <button id="logoutBtn" class="writingone" style="margin-left: 10px; padding: 5px 10px; background-color: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer;">Logout</button>
+                    `;
+
+                    // Add event listener to the logout button
+                    document.getElementById('logoutBtn').addEventListener('click', async () => {
+                        const logoutResponse = await fetch('/api/logout', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        });
+                        const logoutData = await logoutResponse.json();
+                        if (logoutResponse.ok) {
+                            alert(logoutData.message);
+                            window.location.reload(); // Reload the page to update UI after logout
+                        } else {
+                            alert('Logout failed: ' + logoutData.message);
+                        }
+                    });
+                } else {
+                    // If not logged in, display the "Userid" link as before
+                    userStatusContainer.innerHTML = `
+                        <a class="writingone" href="/html/login.html">Userid</a> `;
+                }
+            } catch (error) {
+                console.error('Error fetching user status:', error);
+                // Fallback to default "Userid" link if API call fails
+                userStatusContainer.innerHTML = `
+                    <a class="writingone" href="/html/login.html">Userid</a> `;
+            }
+        });
+    </script>
+</body>
+
+</html>
