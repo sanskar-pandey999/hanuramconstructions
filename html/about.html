@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Dancing+Script:wght@400..700&family=Fjalla+One&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Permanent+Marker&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Dancing+Script:wght@400..700;1,400..700&family=Fjalla+One&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Permanent+Marker&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
         integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
@@ -21,7 +21,7 @@
 
     <nav id="menu">
         <div id="logo">
-            <img src="/static/Adobe Express - file.png" alt="Offline">
+            <img src="/static/Adobe Express - file.png" alt="Hanuram Construction Logo">
         </div>
         <ul>
             <li><a class="writingone" href="../html/home.html">Home</a></li>
@@ -30,6 +30,9 @@
             <li><a class="writingone" href="../html/contactus.html" target="_blank">Contact</a></li>
             <li><a id="userid" class="writingone" href="../html/login.html" target="_blank">Userid</a></li>
         </ul>
+        <button id="mobile-menu-toggle" aria-label="Toggle Mobile Menu">
+            <i class="fa fa-bars"></i>
+        </button>
     </nav>
 
     <section id="about-intro" style="background-image: url('/static/about-us-banner.jpg');">
@@ -98,6 +101,28 @@
     <footer>
         <p>&copy; 2025 Hanuram Construction. All rights reserved.</p>
     </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // --- Mobile Menu Toggle JavaScript ---
+            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+            const navMenu = document.querySelector('#menu ul'); // Selects the <ul> inside #menu
+
+            if (mobileMenuToggle && navMenu) {
+                mobileMenuToggle.addEventListener('click', () => {
+                    console.log('Mobile menu toggle clicked on About page!'); // For debugging
+                    navMenu.classList.toggle('active'); // Toggles 'active' class on the <ul>
+                    mobileMenuToggle.classList.toggle('active'); // Optional: Add active class to button for styling
+                });
+            } else {
+                console.error('Mobile menu toggle or navigation menu not found on About page!');
+            }
+
+            // If you want the dynamic Userid/Logout display from home.html here,
+            // you'll need to copy that entire script block below this.
+            // For now, it will just show the static "Userid" link as per your original about.html.
+        });
+    </script>
 
 </body>
 

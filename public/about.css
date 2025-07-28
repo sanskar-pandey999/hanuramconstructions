@@ -45,7 +45,7 @@ body {
 
 #menu ul {
     list-style: none;
-    display: flex;
+    display: flex; /* Default for larger screens */
     margin: 0;
     padding: 0;
 }
@@ -66,6 +66,8 @@ body {
 }
 
 #menu ul li#userid {
+    /* This rule might cause issues if you implement the dynamic user status from home.html */
+    /* If dynamic login/logout is added, consider removing this specific #userid margin */
     margin-left: auto;
 }
 
@@ -81,6 +83,18 @@ body {
     font-weight: 400;
     font-style: normal;
 }
+
+/* Mobile Menu Toggle Button (Specific to the button itself) */
+#mobile-menu-toggle {
+    background: none;
+    color: #afafaf; /* Or any other color you prefer for the icon */
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: none; /* Hidden by default on larger screens */
+    z-index: 101; /* Ensure it's above the navigation if needed */
+}
+
 
 /* About Page Specific Styles */
 #about-intro {
@@ -184,7 +198,7 @@ body {
 
 .values-list ul {
     list-style: none;
-    padding-left: 20px;
+    padding-left: 20px; /* Adjust if you don't want a default indent */
 }
 
 .values-list li {
@@ -205,19 +219,109 @@ footer {
     font-size: 0.9rem;
 }
 
-/* Responsive Design */
+/* Responsive Design for Mobile Menu and Layouts */
 @media (max-width: 768px) {
+    html {
+        font-size: 15px; /* Slightly reduce base font size for mobile */
+    }
+
+    #menu {
+        flex-wrap: wrap; /* Allow items to wrap */
+        padding: 0 1rem; /* Adjust padding for smaller screens */
+        height: auto; /* Allow height to adjust if items wrap */
+    }
+
+    #menu #logo {
+        margin-right: auto; /* Push logo to the left, mobile toggle to the right */
+    }
+
+    /* Hide the regular nav links and prepare for mobile dropdown */
+    #menu ul {
+        display: none; /* Hide by default on mobile */
+        flex-direction: column; /* Stack items vertically */
+        position: absolute; /* Position relative to the header */
+        top: 60px; /* Adjust based on your header's actual height */
+        left: 0;
+        width: 100%; /* Take full width of the screen */
+        background-color: rgba(0, 0, 0, 0.95); /* Semi-transparent overlay */
+        padding: 1rem 0; /* Vertical padding for menu items */
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Subtle shadow */
+        z-index: 99; /* Ensure it's below sticky header but above content */
+        transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; /* Smooth slide/fade */
+        transform: translateY(-100%); /* Start off-screen upwards */
+        opacity: 0;
+        pointer-events: none; /* Disable interaction when hidden */
+    }
+
+    /* Show the mobile menu when 'active' class is toggled by JS */
+    #menu ul.active {
+        display: flex; /* Make it visible */
+        transform: translateY(0); /* Slide into view */
+        opacity: 1;
+        pointer-events: all; /* Enable interaction */
+    }
+
+    #menu ul li {
+        margin: 0.75rem 0; /* Vertical spacing for menu items */
+        width: 100%; /* Each list item takes full width */
+    }
+
+    #menu ul li a {
+        padding: 10px 0; /* Increase clickable area for touch */
+        display: block; /* Make the whole area of the list item clickable */
+    }
+
+    #menu ul li#userid {
+        margin-left: 0; /* Override desktop auto-margin */
+    }
+
+    /* Display the mobile toggle button */
+    #mobile-menu-toggle {
+        display: block; /* Show the hamburger icon on small screens */
+    }
+
+    /* About page specific responsive adjustments */
+    #about-intro {
+        height: 250px; /* Adjust height for mobile banner */
+    }
+
     #about-intro h1 {
-        font-size: 2.5rem;
+        font-size: 2.2rem; /* Smaller heading for mobile */
+    }
+
+    #about-intro p {
+        font-size: 1rem;
+    }
+
+    #our-story h2,
+    #our-values h2 {
+        font-size: 2.2rem; /* Smaller section headings */
+    }
+
+    .story-content,
+    .values-list {
+        padding: 15px; /* Adjust padding for content boxes */
+        margin: 0 10px; /* Add slight horizontal margin */
     }
 
     .founder-info {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
+        flex-direction: column; /* Stack founder image and bio vertically */
+        align-items: center; /* Center align items */
+        text-align: center; /* Center text within bio for consistency */
     }
 
     .founder-bio {
-        text-align: left;
+        text-align: center; /* Ensure bio text is centered on mobile */
+    }
+
+    .values-list ul {
+        padding-left: 0; /* Remove default list indent on mobile */
+        text-align: center; /* Center value list items */
+    }
+
+    .values-list li {
+        margin-bottom: 8px; /* Reduce space between list items */
+        font-size: 1rem;
     }
 }
