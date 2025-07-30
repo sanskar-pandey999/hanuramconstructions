@@ -4,32 +4,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/signin.css"> <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="/signin.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Dancing+Script:wght@400..700&family=Fjalla+One&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Permanent+Marker&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <title>Login / Create Account</title> <style>
+    <title>Login / Create Account</title>
+    <style>
         /* Basic styles for showing/hiding forms - consider moving these to your signin.css */
         .form-group {
-            display: none; /* Hide forms by default */
+            display: none;
+            /* Hide forms by default */
         }
+
         .form-group.active {
-            display: block; /* Show active form */
+            display: block;
+            /* Show active form */
         }
+
         .btn-field button {
             cursor: pointer;
             padding: 10px 20px;
             margin: 5px;
             border: none;
             border-radius: 5px;
-            background-color: #007bff; /* Example color */
+            background-color: #007bff;
+            /* Example color */
             color: white;
             font-size: 1rem;
         }
+
         .btn-field button.active {
-            background-color: #0056b3; /* Darker color for active button */
+            background-color: #0056b3;
+            /* Darker color for active button */
         }
     </style>
 </head>
@@ -38,10 +47,13 @@
 
     <div id="contactbox" class="writingone">
         <div class="formbox">
-            <h3 id="title" class="writingtwo">Create Account</h3> <div class="underlineh"></div>
+            <h3 id="title" class="writingtwo">Create Account</h3>
+            <div class="underlineh"></div>
 
             <div class="btn-field">
-                <button type="button" id="createAccountToggleBtn" class="active">Create Account</button> <button type="button" id="loginToggleBtn">Login</button> </div>
+                <button type="button" id="createAccountToggleBtn" class="active">Create Account</button>
+                <button type="button" id="loginToggleBtn">Login</button>
+            </div>
 
             <form id="createAccountForm" class="form-group active" action="/home/createaccount" method="POST">
                 <div class="input-grp">
@@ -58,9 +70,10 @@
                         <input type="password" placeholder="Password" name="password" required>
                     </div>
                     <div>
-                        <p><span class="suggestion-text">Password Suggestion</span><a href="#">Click here</a></p>
+                        <p><span class="suggestion-text">Password Suggestion</span><a href="/html/forgetpassword.html">Click here</a></p>
                     </div>
-                    <button type="submit" class="createaccountbtn">Create Account</button> </div>
+                    <button type="submit" class="createaccountbtn">Create Account</button>
+                </div>
             </form>
 
             <form id="loginForm" class="form-group" action="/home/login" method="POST">
@@ -74,9 +87,10 @@
                         <input type="password" placeholder="Password" name="password" required>
                     </div>
                     <div>
-                        <p><span class="suggestion-text">Forgot Password?</span><a href="#">Click here</a></p>
+                        <p><span class="suggestion-text">Forgot Password?</span><a href="/html/forgetpassword.html">Click here</a></p>
                     </div>
-                    <button type="submit" class="loginbtn">Login</button> </div>
+                    <button type="submit" class="loginbtn">Login</button>
+                </div>
             </form>
         </div>
     </div>
@@ -92,17 +106,17 @@
             // Event listener for "Create Account" button click
             createAccountToggleBtn.addEventListener('click', () => {
                 createAccountForm.classList.add('active'); // Show Create Account form
-                loginForm.classList.remove('active');    // Hide Login form
+                loginForm.classList.remove('active'); // Hide Login form
                 createAccountToggleBtn.classList.add('active'); // Activate Create Account button style
-                loginToggleBtn.classList.remove('active');    // Deactivate Login button style
+                loginToggleBtn.classList.remove('active'); // Deactivate Login button style
                 title.textContent = 'Create Account'; // Update title text
             });
 
             // Event listener for "Login" button click
             loginToggleBtn.addEventListener('click', () => {
-                loginForm.classList.add('active');    // Show Login form
+                loginForm.classList.add('active'); // Show Login form
                 createAccountForm.classList.remove('active'); // Hide Create Account form
-                loginToggleBtn.classList.add('active');    // Activate Login button style
+                loginToggleBtn.classList.add('active'); // Activate Login button style
                 createAccountToggleBtn.classList.remove('active'); // Deactivate Create Account button style
                 title.textContent = 'Login'; // Update title text
             });
