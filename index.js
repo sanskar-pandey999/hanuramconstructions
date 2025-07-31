@@ -521,12 +521,12 @@ app.post('/api/forgot-password/resend-pin', async (req, res) => {
         const mailOptions = {
             from: process.env.EMAIL_USER,
             to: email,
-            subject: 'Georget - Password Reset Verification (Resent)',
+            subject: 'Hanuram Constructions- Password Reset Verification (Resent)',
             html: `
                 <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
                     <h2 style="color: #007bff;">Password Reset Request (Resent)</h2>
                     <p>Hello,</p>
-                    <p>You have requested to resend your password reset PIN for your Georget account.</p>
+                    <p>You have requested to resend your password reset PIN for your hanuram constructions account.</p>
                     <p>Your new verification **PIN is: <strong style="font-size: 1.5em; color: #007bff;">${pin}</strong></p>
                     <p>This PIN is valid for 15 minutes. Please enter it on the password reset page to continue.</p>
                     <p>If you did not request a password reset, please ignore this email.</p>
