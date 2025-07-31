@@ -1,14 +1,15 @@
 /* visitingcard.css */
 
 /* General Body Styling (already mostly handled by Tailwind in HTML) */
-body{
-    font-family: 'Inter', sans-serif; /* Primary font for general text */
+body {
+    font-family: 'Inter', sans-serif;
+    /* Primary font for general text */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-     background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../../static/san-francisco-210230_1280.jpg');
-     background-repeat:no-repeat;
-     background-size:cover;
-      background-attachment: fixed;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../../static/san-francisco-210230_1280.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
 }
 
 /* --- Visiting Card Section --- */
@@ -16,78 +17,105 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh; /* Make sure it takes full viewport height */
-    background-color: #1a202c; /* Ensure consistent background */
-    padding: 1rem; /* Added padding for smaller screens */
+    min-height: 100vh;
+    /* Make sure it takes full viewport height */
+    background-color: #1a202c;
+    /* Ensure consistent background */
+    padding: 1rem;
+    /* Added padding for smaller screens */
 }
 
 .card {
-    border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
-    backdrop-filter: blur(5px); /* Slightly blur background for a modern look */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    /* Subtle border */
+    backdrop-filter: blur(5px);
+    /* Slightly blur background for a modern look */
     -webkit-backdrop-filter: blur(5px);
-    background-color: rgba(31, 41, 55, 0.8); /* Slightly transparent background */
+    background-color: rgba(31, 41, 55, 0.8);
+    /* Slightly transparent background */
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 .card:hover {
-    transform: translateY(-5px); /* Slight lift on hover */
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4); /* More pronounced shadow on hover */
+    transform: translateY(-5px);
+    /* Slight lift on hover */
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+    /* More pronounced shadow on hover */
 }
 
 .card img {
-    box-shadow: 0 0 15px rgba(253, 224, 71, 0.6); /* Glow effect for the image border */
+    box-shadow: 0 0 15px rgba(253, 224, 71, 0.6);
+    /* Glow effect for the image border */
     transition: transform 0.3s ease-in-out;
 }
 
 .card img:hover {
-    transform: scale(1.03); /* Slightly enlarge image on hover */
+    transform: scale(1.03);
+    /* Slightly enlarge image on hover */
 }
 
 .name {
-    font-family: 'Fjalla One', sans-serif; /* Distinct font for the name */
+    font-family: 'Fjalla One', sans-serif;
+    /* Distinct font for the name */
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: #fdd835; /* Yellowish color for emphasis */
+    color: #fdd835;
+    /* Yellowish color for emphasis */
 }
 
 .qualifications {
-    font-family: 'Lora', serif; /* Elegant font for qualifications */
+    font-family: 'Lora', serif;
+    /* Elegant font for qualifications */
     font-style: italic;
-    color: #b0bec5; /* Lighter grey for qualifications */
+    color: #b0bec5;
+    /* Lighter grey for qualifications */
 }
 
 /* New: Contact Info Styling */
 .contact-info {
-    margin-bottom: 1rem; /* Add some space below contact info */
+    margin-bottom: 1rem;
+    /* Add some space below contact info */
 }
 
 .contact-info p {
-    display: flex; /* Make sure icon and text are inline */
-    align-items: center; /* Vertically align icon and text */
-    color: #cfd8dc; /* Light grey for contact text */
+    display: flex;
+    /* Make sure icon and text are inline */
+    align-items: center;
+    /* Vertically align icon and text */
+    color: #cfd8dc;
+    /* Light grey for contact text */
 }
 
 .contact-info p a {
-    color: inherit; /* Inherit color from parent p tag */
-    text-decoration: none; /* Remove underline */
+    color: inherit;
+    /* Inherit color from parent p tag */
+    text-decoration: none;
+    /* Remove underline */
     transition: color 0.2s ease-in-out;
 }
 
 .contact-info p a:hover {
-    color: #fdd835; /* Highlight on hover, matching card theme */
+    color: #fdd835;
+    /* Highlight on hover, matching card theme */
 }
 
 .contact-info p i {
-    font-size: 1rem; /* Adjust icon size if needed */
+    font-size: 1rem;
+    /* Adjust icon size if needed */
 }
 
 
 .description {
-    font-family: 'Montserrat', sans-serif; /* Readable font for description */
-    color: #cfd8dc; /* Light grey for description */
-    text-align: justify; /* Justify text for better readability */
-    scrollbar-width: thin; /* For Firefox */
-    scrollbar-color: #fdd835 #4a5568; /* For Firefox: thumb and track color */
+    font-family: 'Montserrat', sans-serif;
+    /* Readable font for description */
+    color: #cfd8dc;
+    /* Light grey for description */
+    text-align: justify;
+    /* Justify text for better readability */
+    scrollbar-width: thin;
+    /* For Firefox */
+    scrollbar-color: #fdd835 #4a5568;
+    /* For Firefox: thumb and track color */
 }
 
 /* Custom scrollbar for Webkit browsers (Chrome, Safari) */
@@ -96,77 +124,98 @@ body{
 }
 
 .description::-webkit-scrollbar-track {
-    background: #4a5568; /* Darker track */
+    background: #4a5568;
+    /* Darker track */
     border-radius: 10px;
 }
 
 .description::-webkit-scrollbar-thumb {
-    background-color: #fdd835; /* Yellowish thumb */
+    background-color: #fdd835;
+    /* Yellowish thumb */
     border-radius: 10px;
-    border: 2px solid #4a5568; /* Padding around thumb */
+    border: 2px solid #4a5568;
+    /* Padding around thumb */
 }
 
 /* --- Image Gallery Section --- */
 .image-gallery-section {
     padding-top: 2rem;
-    padding-bottom: 4rem; /* More space at the bottom */
+    padding-bottom: 4rem;
+    /* More space at the bottom */
 }
 
 .image-gallery-section h1 {
-    font-family: 'Bebas Neue', sans-serif; /* Strong, bold font for the heading */
+    font-family: 'Bebas Neue', sans-serif;
+    /* Strong, bold font for the heading */
     letter-spacing: 0.08em;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Subtle text shadow */
-    color: #fdd835; /* Match the yellow accent */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    /* Subtle text shadow */
+    color: #fdd835;
+    /* Match the yellow accent */
 }
 
 .scroll-container {
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
+    /* Smooth scrolling on iOS */
     /* Custom scrollbar for Webkit browsers (Chrome, Safari) */
-    scrollbar-width: thin; /* For Firefox */
-    scrollbar-color: #fdd835 #2d3748; /* For Firefox: thumb and track color */
+    scrollbar-width: thin;
+    /* For Firefox */
+    scrollbar-color: #fdd835 #2d3748;
+    /* For Firefox: thumb and track color */
 }
 
 .scroll-container::-webkit-scrollbar {
-    height: 10px; /* Height of horizontal scrollbar */
+    height: 10px;
+    /* Height of horizontal scrollbar */
 }
 
 .scroll-container::-webkit-scrollbar-track {
-    background: #2d3748; /* Darker track for gallery */
+    background: #2d3748;
+    /* Darker track for gallery */
     border-radius: 10px;
 }
 
 .scroll-container::-webkit-scrollbar-thumb {
-    background-color: #fdd835; /* Yellowish thumb */
+    background-color: #fdd835;
+    /* Yellowish thumb */
     border-radius: 10px;
-    border: 2px solid #2d3748; /* Padding around thumb */
+    border: 2px solid #2d3748;
+    /* Padding around thumb */
 }
 
-.scroll-container > div {
-    border: 2px solid transparent; /* Default border, will change on hover */
+.scroll-container>div {
+    border: 2px solid transparent;
+    /* Default border, will change on hover */
     transition: all 0.3s ease-in-out;
 }
 
-.scroll-container > div:hover {
-    border-color: #fdd835; /* Highlight border on hover */
-    box-shadow: 0 0 20px rgba(253, 224, 71, 0.7); /* Stronger glow on hover */
+.scroll-container>div:hover {
+    border-color: #fdd835;
+    /* Highlight border on hover */
+    box-shadow: 0 0 20px rgba(253, 224, 71, 0.7);
+    /* Stronger glow on hover */
 }
 
 /* --- User Status / Footer Script Styling --- */
 .writingone {
     font-family: 'Inter', sans-serif;
-    color: #e2e8f0; /* Light text color */
-    text-decoration: none; /* Remove underline from links */
+    color: #e2e8f0;
+    /* Light text color */
+    text-decoration: none;
+    /* Remove underline from links */
     transition: color 0.2s ease-in-out;
 }
 
 .writingone:hover {
-    color: #fdd835; /* Highlight on hover */
+    color: #fdd835;
+    /* Highlight on hover */
 }
 
 #logoutBtn {
     /* Styles already inline, but adding here for consistency if moved */
     font-family: 'Inter', sans-serif;
-    background-color: #dc3545; /* Red color */
+    background-color: #dc3545;
+    /* Red color */
     color: white;
     border: none;
     border-radius: 5px;
@@ -175,20 +224,123 @@ body{
 }
 
 #logoutBtn:hover {
-    background-color: #c82333; /* Darker red on hover */
+    background-color: #c82333;
+    /* Darker red on hover */
 }
 
 /* --- Footer Styling --- */
 footer {
     text-align: center;
     padding: 2rem 1rem;
-    background-color: #1a202c; /* Dark background for footer */
-    color: #a0aec0; /* Lighter grey for copyright text */
+    background-color: #1a202c;
+    /* Dark background for footer */
+    color: #a0aec0;
+    /* Lighter grey for copyright text */
     font-family: 'Inter', sans-serif;
     font-size: 0.9rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.05); /* Subtle separator */
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    /* Subtle separator */
     margin-top: 2rem;
 }
+
+/* --- Responsive Table Styling --- */
+table {
+    width: 95%; /* Adjusted for better mobile padding */
+    border-collapse: collapse;
+    margin: 20px auto; /* Added more margin for spacing */
+    font-family: 'Inter', sans-serif; /* Consistent font with body */
+    color: #e2e8f0; /* Light text color for table content */
+    background-color: rgba(31, 41, 55, 0.9); /* Slightly darker, more opaque background */
+    border-radius: 8px; /* Rounded corners for the table */
+    overflow: hidden; /* Ensures rounded corners are visible with borders */
+}
+
+/* Basic table cell and header styling */
+th, td {
+    padding: 12px;
+    text-align: left; /* Align text left for better readability */
+    border-bottom: 1px solid rgba(253, 224, 71, 0.3); /* Subtle yellow border */
+}
+
+th {
+    background-color: #000000; /* Yellow header background */
+    color: #ffffff; /* Dark text for headers */
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.9em;
+}
+
+/* Styling for even rows */
+tr:nth-child(even) {
+    background-color: rgba(45, 55, 72, 0.7); /* Darker shade for even rows */
+}
+
+/* Hover effect for rows */
+tr:hover {
+    background-color: rgba(60, 75, 90, 0.7); /* Slightly lighter on hover */
+    transition: background-color 0.2s ease-in-out;
+}
+
+/* Specific styling for the last cell in a row (if needed, e.g., for actions) */
+td:last-child, th:last-child {
+    border-right: none;
+}
+
+/* Media query for small screens (e.g., mobile phones) */
+@media (max-width: 768px) {
+    table {
+        border: 0; /* Remove outer border for cleaner look on mobile */
+        width: 100%; /* Take full width on small screens */
+    }
+
+    table thead {
+        display: none; /* Hide table headers on small screens */
+    }
+
+    table, tbody, tr, td {
+        display: block; /* Make table elements behave like block elements */
+        width: 100%; /* Ensure they take full width */
+    }
+
+    tr {
+        margin-bottom: 1rem; /* Add space between rows when stacked */
+        border: 1px solid rgba(255, 255, 255, 0.1); /* Add a border to each "row" */
+        border-radius: 8px;
+        background-color: rgba(31, 41, 55, 0.8); /* Card-like background for each row */
+    }
+
+    td {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Subtle separator between "cells" */
+        text-align: right; /* Align value to the right */
+        padding-left: 50%; /* Make space for the pseudo-element label */
+        position: relative; /* For pseudo-element positioning */
+        white-space: normal; /* Allow text to wrap */
+        word-break: break-word; /* Break long words */
+    }
+
+    td:before {
+        content: attr(data-label); /* Use data-label attribute for the header */
+        position: absolute;
+        left: 10px;
+        width: calc(50% - 20px); /* Adjust width to fit */
+        padding-right: 10px;
+        white-space: nowrap; /* Prevent label from wrapping */
+        text-align: left; /* Align label to the left */
+        font-weight: bold;
+        color: #fdd835; /* Yellow color for the label */
+    }
+
+    /* Remove border from the last cell in a stacked row */
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    /* If you have specific column headers, you'll need to add data-label to your HTML.
+       Example: <td data-label="Name">John Doe</td>
+    */
+}
+
 
 @media (max-width: 640px) {
     .visitingcardpage {
@@ -214,38 +366,16 @@ footer {
 
     .description {
         font-size: 0.8rem;
-        max-height: 150px; /* Adjust max-height for smaller screens */
+        max-height: 150px;
+        /* Adjust max-height for smaller screens */
     }
 
     .image-gallery-section h1 {
         font-size: 2rem;
     }
 
-    .scroll-container > div {
+    .scroll-container>div {
         width: 220px;
         height: 160px;
     }
 }
-
-  table {
-            width: 80%;
-            border-collapse: collapse;
-            margin: auto;
-            font-family: Arial, sans-serif;
-        }
-        th, td {
-            border: 2px solid #fdd835 ;
-            padding: 8px;
-            text-align: center;
-            background-color: #f96969;
-        }
-        th {
-            background-color: #f96969;
-            color: #333;
-        }
-        tr:nth-child(even) {
-            background-color: #f47171;
-        }
-        tr:hover {
-            background-color: #f1f1f1;
-        }
