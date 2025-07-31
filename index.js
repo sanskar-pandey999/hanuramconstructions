@@ -7,6 +7,10 @@ const bcrypt = require('bcrypt'); // For password encryption
 const session = require('express-session'); // For session management
 const nodemailer = require('nodemailer'); // For sending emails
 const crypto = require('crypto'); // For generating random PINs
+// Dynamic engineer data
+const engineers = require('./data/engineers.json');
+
+
 
 console.log("1. Starting server setup...");
 
@@ -45,7 +49,7 @@ const transporter = nodemailer.createTransport({
     },
     // *** IMPORTANT: Add these logging options to see SMTP communication in your main app ***
     logger: true, // Enable verbose logging
-    debug: true   // Enable detailed SMTP communication logging
+    debug: true  // Enable detailed SMTP communication logging
     // Optional: For some services or if you encounter issues, you might need to specify host/port
     // host: 'smtp.gmail.com',
     // port: 587,
@@ -67,7 +71,8 @@ const ContactusSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        unique: true // Ensures each email submitted is unique
+        // unique: true // Removed unique constraint as discussed, if multiple submissions from same email are allowed over time
+        // If you want to keep it unique, ensure this is the desired behavior.
     },
     phone: {
         type: String,
@@ -165,10 +170,13 @@ const PasswordResetTokenSchema = new mongoose.Schema({
 });
 const PasswordResetToken = mongoose.model('PasswordResetToken', PasswordResetTokenSchema);
 
-// --- Routes ---
+// --- View-engine setup ---
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+console.log(`EJS view engine configured. Views path: ${path.join(__dirname, 'views')}`);
 
-// Add this route *after* your app.use(express.static(...))
-// but *before* other specific app.get("/html/...") routes
+
+// --- Routes ---
 
 app.get("/", (req, res) => {
     console.log("GET / requested. Serving home.html");
@@ -206,39 +214,26 @@ app.get("/html/login.html", (req, res) => {
     res.sendFile(path.join(__dirname, "html", "login.html"));
 });
 
-// GET route for the Login/Create Account page
+// GET route for the Engineers main page (listing all engineers or introductory content)
 app.get("/html/engineers.html", (req, res) => {
     console.log("GET /html/engineers.html requested.");
     res.sendFile(path.join(__dirname, "html", "engineers.html"));
 });
 
-// GET route for the Login/Create Account page
-app.get("/html/engineerss/engineer1.html", (req, res) => {
-    console.log("GET /html/engineers/engineer1.html requested.");
-    res.sendFile(path.join(__dirname, "html/engineerss", "engineer1.html"));
-});
-
-// GET route for the Login/Create Account page
-app.get("/html/engineerss/engineer2.html", (req, res) => {
-    console.log("GET /html/engineers/engineer2.html requested.");
-    res.sendFile(path.join(__dirname, "html/engineerss", "engineer2.html"));
-});
-
-
-// GET route for the Login/Create Account page
-app.get("/html/engineerss/engineer3.html", (req, res) => {
-    console.log("GET /html/engineers/engineer1.html requested.");
-    res.sendFile(path.join(__dirname, "html/engineerss", "engineer3.html"));
+// --- Dynamic Engineer Profile Route ---
+app.get('/engineers/:id', (req, res) => {
+    console.log(`GET /engineers/${req.params.id} requested.`);
+    const engineer = engineers.find(e => e.engineerId === req.params.id);
+    if (!engineer) {
+        console.log(`Engineer with ID ${req.params.id} not found.`);
+        return res.status(404).send('Engineer not found');
+    }
+    console.log(`Rendering engineer profile for: ${engineer.name}`);
+    res.render('engineer', { engineer });
 });
 
 
-// GET route for the Login/Create Account page
-app.get("/html/engineerss/engineer4.html", (req, res) => {
-    console.log("GET /html/engineers/engineer4.html requested.");
-    res.sendFile(path.join(__dirname, "html/engineerss", "engineer4.html"));
-});
-
-// GET route for the Login/Create Account page
+// GET route for the Forgot Password page
 app.get("/html/forgetpassword.html", (req, res) => {
     console.log("GET /html/forgetpassword.html requested.");
     res.sendFile(path.join(__dirname, "html", "forgetpassword.html"));
@@ -285,7 +280,7 @@ app.post("/home/contactus", async (req, res) => {
         res.status(200).send("<script>alert('Your message has been sent successfully!'); window.location.href='/html/home.html';</script>");
     } catch (error) {
         console.error("Error saving contact form entry:", error);
-        if (error.code === 11000) { // MongoDB duplicate key error (email is unique)
+        if (error.code === 11000) { // MongoDB duplicate key error (if email was unique)
             return res.status(409).send("<script>alert('Email already registered for contact. Please use a different email or login.'); window.location.href='/html/contactus.html';</script>");
         } else if (error.name === 'ValidationError') { // Mongoose validation error (e.g., missing required fields)
             const messages = Object.values(error.errors).map(val => val.message);
@@ -296,7 +291,7 @@ app.post("/home/contactus", async (req, res) => {
     }
 });
 
-// POST route for Create Account (User Registration) - Corrected from duplicate login route
+// POST route for Create Account (User Registration)
 app.post("/home/createaccount", async (req, res) => {
     console.log("POST /home/createaccount received:", req.body);
     const { name, email, password } = req.body;
@@ -377,15 +372,15 @@ app.post("/home/login", async (req, res) => {
     }
 });
 
-// --- Forgot Password Routes (New) ---
+// --- Forgot Password Routes ---
 
 // POST /api/forgot-password/send-email: Send verification email with PIN
 app.post('/api/forgot-password/send-email', async (req, res) => {
     const { email } = req.body;
-    console.log(`[DEBUG] Received request to send reset email for: ${email}`); // ADDED LOG
+    console.log(`[DEBUG] Received request to send reset email for: ${email}`);
 
     if (!email) {
-        console.log("[DEBUG] Email not provided in request body."); // ADDED LOG
+        console.log("[DEBUG] Email not provided in request body.");
         return res.status(400).json({ message: 'Email is required.' });
     }
 
@@ -393,22 +388,23 @@ app.post('/api/forgot-password/send-email', async (req, res) => {
         const user = await UserAccount.findOne({ email });
         if (!user) {
             // For security, always respond with a generic message even if email not found
-            console.log(`[DEBUG] Forgot password attempt for non-existent email: ${email}. Sending generic success.`); // ADDED LOG
+            console.log(`[DEBUG] Forgot password attempt for non-existent email: ${email}. Sending generic success.`);
             return res.status(200).json({ message: 'If an account with that email exists, a verification PIN has been sent.' });
         }
 
-        console.log(`[DEBUG] Found user: ${user.email}. Generating PIN...`); // ADDED LOG
-        // Generate a 6-digit PIN
+        console.log(`[DEBUG] Found user: ${user.email}. Generating PIN...`);
+        // Generate a 6-digit alphanumeric PIN (using hex for now, as per your code)
+        // If strictly numeric, use: Math.floor(100000 + Math.random() * 900000).toString();
         const pin = crypto.randomBytes(3).toString('hex').toUpperCase(); // Generates 6 hex characters (3 bytes)
         const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // PIN valid for 15 minutes
 
         // Delete any existing unused PINs for this email
         await PasswordResetToken.deleteMany({ email, used: false });
-        console.log(`[DEBUG] Existing unused PINs for ${email} cleared.`); // ADDED LOG
+        console.log(`[DEBUG] Existing unused PINs for ${email} cleared.`);
 
         const newResetToken = new PasswordResetToken({ email, pin, expiresAt });
         await newResetToken.save();
-        console.log(`[DEBUG] Generated PIN for ${email}: ${pin}. Saved to DB.`); // ADDED LOG
+        console.log(`[DEBUG] Generated PIN for ${email}: ${pin}. Saved to DB.`);
 
         // Send email
         const mailOptions = {
@@ -428,14 +424,14 @@ app.post('/api/forgot-password/send-email', async (req, res) => {
             `
         };
 
-        console.log(`[DEBUG] Attempting to send verification email to ${email}...`); // ADDED LOG
+        console.log(`[DEBUG] Attempting to send verification email to ${email}...`);
         let info = await transporter.sendMail(mailOptions);
-        console.log(`[DEBUG] Verification email sent to ${email}`); // ADDED LOG
-        console.log("[DEBUG] Message ID (from main app):", info.messageId); // ADDED LOG
+        console.log(`[DEBUG] Verification email sent to ${email}`);
+        console.log("[DEBUG] Message ID (from main app):", info.messageId);
         res.status(200).json({ message: 'Verification email sent. Check your inbox!' });
 
     } catch (error) {
-        console.error("❌ Error sending password reset email in main app:", error); // Make this more distinct
+        console.error("❌ Error sending password reset email in main app:", error);
         if (error.response) {
             console.error("SMTP Response in main app:", error.response);
         }
@@ -478,10 +474,8 @@ app.post('/api/forgot-password/verify-pin', async (req, res) => {
         await resetToken.save();
         console.log(`PIN verified successfully for ${email}.`);
 
-        // For the frontend to proceed to the new password step, we might store a temporary flag in session
-        // or rely on the frontend's state management after this successful response.
-        // For simplicity, we'll just send a success message.
-        req.session.resetEmail = email; // Store email in session to use in next step
+        // Store email in session to use in next step for password reset
+        req.session.resetEmail = email;
         res.status(200).json({ message: 'PIN verified successfully!' });
 
     } catch (error) {
@@ -506,7 +500,8 @@ app.post('/api/forgot-password/resend-pin', async (req, res) => {
             return res.status(200).json({ message: 'If an account with that email exists, a new verification PIN has been sent.' });
         }
 
-        // Generate a new 6-digit PIN
+        // Generate a new 6-digit alphanumeric PIN
+        // If strictly numeric, use: Math.floor(100000 + Math.random() * 900000).toString();
         const pin = crypto.randomBytes(3).toString('hex').toUpperCase();
         const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // New PIN valid for 15 minutes
 
@@ -521,7 +516,7 @@ app.post('/api/forgot-password/resend-pin', async (req, res) => {
         const mailOptions = {
             from: process.env.EMAIL_USER,
             to: email,
-            subject: 'Hanuram Constructions- Password Reset Verification (Resent)',
+            subject: 'Hanuram Constructions - Password Reset Verification (Resent)',
             html: `
                 <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
                     <h2 style="color: #007bff;">Password Reset Request (Resent)</h2>
@@ -547,17 +542,15 @@ app.post('/api/forgot-password/resend-pin', async (req, res) => {
 
 // POST /api/forgot-password/set-new-password: Set the new password
 app.post('/api/forgot-password/set-new-password', async (req, res) => {
-    const { email, newPin } = req.body; // 'newPin' here refers to the new password
+    const { email, newPassword } = req.body; // Renamed 'newPin' to 'newPassword' for clarity
     console.log(`Received request to set new password for: ${email}`);
 
     // Ensure the email was verified in the previous step (e.g., from session)
-    // This is a basic check. For stronger security, you'd use a one-time token
-    // passed from the verify-pin step to this step.
     if (!req.session.resetEmail || req.session.resetEmail !== email) {
         return res.status(403).json({ message: 'Unauthorized: Please go through the PIN verification process first.' });
     }
 
-    if (!newPin) {
+    if (!newPassword) {
         return res.status(400).json({ message: 'New password is required.' });
     }
 
@@ -569,7 +562,8 @@ app.post('/api/forgot-password/set-new-password', async (req, res) => {
         }
 
         // Hash the new password and update the user
-        user.password = newPin; // The pre-save hook will hash this
+        // The pre-save hook on UserAccountSchema will hash the newPassword
+        user.password = newPassword;
         await user.save();
         console.log(`Password for ${email} has been reset successfully.`);
 
@@ -594,7 +588,7 @@ async function startServer() {
         const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/hrsample_local';
 
         await mongoose.connect(MONGODB_URI);
-        console.log("✅ Connection Established to MongoDB: hrsample"); // This log might need adjustment for the dynamic name
+        console.log("✅ Connection Established to MongoDB: hrsample_local (or remote)"); // Adjusted log message
 
         // Start the Express server
         app.listen(PORT, () => {
@@ -607,4 +601,4 @@ async function startServer() {
     }
 }
 
-startServer(); // Call the function to start the server and connect to DB
+startServer(); // Call the function to start the server and connect to DB.
