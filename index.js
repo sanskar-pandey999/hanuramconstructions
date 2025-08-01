@@ -265,11 +265,8 @@ app.get("/html/engineers.html", (req, res) => {
 app.get('/engineers/:id', async (req, res) => {
     console.log(`GET /engineers/${req.params.id} requested.`);
     try {
-        // Use the new `Engineer` model from the `engineersDbConnection`
-        // It's important to define the model AFTER the connection is established.
-        // We ensure it's defined in the engineersDbConnection.on('connected') listener,
-        // so we can just retrieve it here.
-        const Engineer = engineersDbConnection.model('Engineer');
+        // Use the globally accessible Engineer model
+        // This 'Engineer' variable will be populated once the engineersDbConnection is created
         console.log(`Attempting to find engineer with engineerId: ${req.params.id}`);
         const engineer = await Engineer.findOne({ engineerId: req.params.id });
 
@@ -277,7 +274,7 @@ app.get('/engineers/:id', async (req, res) => {
             console.log(`Engineer with ID ${req.params.id} not found in DB.`);
             return res.status(404).send('Engineer not found');
         }
-        console.log(`Successfully found engineer:`, engineer); // Log the found engineer object
+        console.log(`Successfully found engineer:`, engineer.name); // Log only name to avoid large object in logs
         console.log(`Rendering engineer profile for: ${engineer.name}`);
         res.render('engineer', { engineer });
     } catch (error) {
@@ -639,6 +636,8 @@ console.log("4. Attempting to start server...");
 
 // Declare global variable for the engineers database connection
 let engineersDbConnection;
+// Declare the Engineer model globally or at a scope where it's accessible by the route
+let Engineer; // <--- Declare Engineer model variable here
 
 async function startServer() {
     try {
@@ -656,12 +655,16 @@ async function startServer() {
         // Create a new connection instance for the engineers database
         engineersDbConnection = mongoose.createConnection(MONGO_URI2);
 
+        // --- IMPORTANT CHANGE: Define the Engineer model IMMEDIATELY AFTER creating the connection instance ---
+        // This ensures the model is registered as soon as the connection object exists,
+        // before any route might try to use it.
+        Engineer = engineersDbConnection.model('Engineer', EngineerSchema, 'engineers');
+        console.log("Engineer model defined on engineersDbConnection (early registration).");
+        // --- END IMPORTANT CHANGE ---
+
         engineersDbConnection.on('connected', () => {
             console.log("✅ Connection Established to Engineers MongoDB: hanuramdb");
-            // Define the Engineer model on this specific connection
-            // It's important to define the model AFTER the connection is established.
-            engineersDbConnection.model('Engineer', EngineerSchema, 'engineers'); // 'engineers' is the collection name
-            console.log("Engineer model defined on engineersDbConnection.");
+            // No need to define Engineer here again. It's already defined above.
         });
 
         engineersDbConnection.on('error', (err) => {
