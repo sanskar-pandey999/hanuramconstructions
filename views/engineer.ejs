@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,11 +11,11 @@
 
 <body class="bg-gray-900 text-white font-sans">
 
+  <!-- Profile Card -->
   <div class="card bg-gray-800 rounded-lg shadow-xl p-6 sm:p-8 max-w-md mx-auto text-center mt-10">
     <img src="<%= engineer.profilePictureUrl %>" alt="Engineer Photo"
-      class="w-48 h-48 object-cover rounded-full mx-auto mb-4 border-4 border-yellow-500">
+      class="w-48 h-48 object-cover rounded-full mx-auto mb-4 border-4 border-yellow-500" />
     <h3 class="text-2xl font-bold mb-2"><%= engineer.name %></h3>
-
     <h4 class="text-lg text-gray-300 mb-4">
       <% if (engineer.qualifications && engineer.qualifications.length > 0) { %>
         <% engineer.qualifications.forEach(function(q, index) { %>
@@ -26,16 +25,24 @@
         Not specified
       <% } %>
     </h4>
-
     <div class="space-y-2 mb-4">
-      <p><a href="tel:<%= engineer.contact.phone %>" class="text-yellow-400 hover:underline"><%= engineer.contact.phone %></a></p>
-      <p><a href="mailto:<%= engineer.contact.email %>" class="text-yellow-400 hover:underline"><%= engineer.contact.email %></a></p>
+      <p>
+        <a href="tel:<%= engineer.contact.phone %>" class="text-yellow-400 hover:underline">
+          <%= engineer.contact.phone %>
+        </a>
+      </p>
+      <p>
+        <a href="mailto:<%= engineer.contact.email %>" class="text-yellow-400 hover:underline">
+          <%= engineer.contact.email %>
+        </a>
+      </p>
     </div>
-
-    <p class="text-sm text-gray-400 max-h-64 overflow-y-auto"><%= engineer.description %></p>
+    <p class="text-sm text-gray-400 max-h-64 overflow-y-auto">
+      <%= engineer.description %>
+    </p>
   </div>
 
-  <!-- Projects -->
+  <!-- Project Highlights -->
   <div class="p-6 sm:p-8">
     <div class="max-w-7xl mx-auto bg-gray-800 rounded-lg shadow-xl p-6">
       <h2 class="text-3xl font-bold text-center mb-6">Project Highlights</h2>
@@ -44,48 +51,68 @@
           <div class="flex-shrink-0 w-64 h-48 bg-gray-700 rounded-xl overflow-hidden snap-center">
             <img src="<%= img %>" alt="Project Image"
               class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-              onerror="this.onerror=null;this.src='https://placehold.co/700x500/334155/e2e8f0?text=Image+Load+Error';">
+              onerror="this.onerror=null;this.src='https://placehold.co/700x500/334155/e2e8f0?text=Image+Load+Error';" />
           </div>
-        <% }) %>
+        <% }); %>
       </div>
     </div>
   </div>
 
-  <!-- Videos -->
-  <% if (engineer.videos.length > 0) { %>
+  <!-- Videos Section -->
+  <% if (engineer.videos && engineer.videos.length > 0) { %>
     <div class="p-6 sm:p-8">
       <div class="max-w-4xl mx-auto bg-gray-800 rounded-lg shadow-xl p-6">
-        <h2 class="text-2xl font-bold text-center mb-4">Videos</h2>
+        <h2 class="text-2xl font-bold text-center mb-4 text-white">Videos</h2>
         <div class="flex flex-wrap justify-center gap-4">
-          <% engineer.videos.forEach(video => { %>
-            <video controls width="300" class="rounded-lg">
-              <source src="<%= video %>" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-          <% }) %>
+          <% engineer.videos.forEach(video => {
+            if (video.includes("youtube.com") || video.includes("youtu.be")) {
+              let videoId = null;
+              if (video.includes("youtube.com")) {
+                const parts = video.split("v=");
+                if (parts.length > 1) videoId = parts[1].split("&")[0];
+              } else if (video.includes("youtu.be")) {
+                videoId = video.split("youtu.be/")[1]?.split("?")[0];
+              }
+              const embedUrl = videoId 
+                ? `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=1` 
+                : null;
+
+              if (embedUrl) { %>
+                <iframe 
+                  width="300" 
+                  height="170" 
+                  src="<%= embedUrl %>" 
+                  title="YouTube video player" 
+                  class="rounded-lg"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen>
+                </iframe>
+          <% } 
+            } else { %>
+              <video controls loop muted autoplay width="300" height="170" class="rounded-lg">
+                <source src="<%= video %>" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+          <% } 
+          }); %>
         </div>
       </div>
     </div>
   <% } %>
 
+  <!-- Services Offered -->
   <% if (engineer.servicesOffered && engineer.servicesOffered.length > 0) { %>
     <div class="p-6 sm:p-8">
       <div class="max-w-4xl mx-auto bg-gray-800 rounded-lg shadow-xl p-6">
         <h2 class="text-2xl font-bold text-center mb-6 text-gray-100">Services Offered</h2>
-
         <div class="overflow-x-auto">
           <table class="min-w-full divide-y divide-gray-700 bg-gray-900 rounded-lg">
             <thead class="bg-gray-700">
               <tr>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                  Service
-                </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                  Price
-                </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                  Time Required
-                </th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Service</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Price</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Time Required</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-700">
@@ -101,7 +128,7 @@
                     <%= service.timeRequired %>
                   </td>
                 </tr>
-              <% }) %>
+              <% }); %>
             </tbody>
           </table>
         </div>
