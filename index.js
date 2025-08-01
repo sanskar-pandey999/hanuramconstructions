@@ -7,10 +7,8 @@ const bcrypt = require('bcrypt'); // For password encryption
 const session = require('express-session'); // For session management
 const nodemailer = require('nodemailer'); // For sending emails
 const crypto = require('crypto'); // For generating random PINs
-// Dynamic engineer data
-const engineers = require('./data/engineers.json');
-
-
+// Dynamic engineer data (will be replaced by fetching from MongoDB)
+// const engineers = require('./data/engineers.json'); // REMOVE THIS LINE
 
 console.log("1. Starting server setup...");
 
@@ -45,17 +43,17 @@ const transporter = nodemailer.createTransport({
     service: 'gmail', // or 'outlook', 'sendgrid', etc.
     auth: {
         user: process.env.EMAIL_USER, // Your email address (from .env)
-        pass: process.env.EMAIL_PASS  // Your email password or app-specific password (from .env)
+        pass: process.env.EMAIL_PASS // Your email password or app-specific password (from .env)
     },
     // *** IMPORTANT: Add these logging options to see SMTP communication in your main app ***
     logger: true, // Enable verbose logging
-    debug: true  // Enable detailed SMTP communication logging
+    debug: true // Enable detailed SMTP communication logging
     // Optional: For some services or if you encounter issues, you might need to specify host/port
     // host: 'smtp.gmail.com',
     // port: 587,
     // secure: false, // true for 465, false for other ports
     // tls: {
-    //     rejectUnauthorized: false // Use this only if you are having issues with self-signed certs (not recommended for production)
+    //      rejectUnauthorized: false // Use this only if you are having issues with self-signed certs (not recommended for production)
     // }
 });
 console.log("Nodemailer transporter configured with debug logging."); // Updated log message
@@ -170,6 +168,48 @@ const PasswordResetTokenSchema = new mongoose.Schema({
 });
 const PasswordResetToken = mongoose.model('PasswordResetToken', PasswordResetTokenSchema);
 
+// NEW: Schema for Engineer data
+const EngineerSchema = new mongoose.Schema({
+    engineerId: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    name: {
+        type: String,
+        required: true
+    },
+    profilePictureUrl: String, // Add this if you have profile pictures
+    specialization: {
+        type: String,
+        required: true
+    },
+    experience: {
+        type: Number,
+        required: true
+    },
+    location: String,
+    // --- UPDATED: 'contact' is now an object with 'phone' and 'email' ---
+    contact: {
+        phone: String,
+        email: String // Assuming email is now nested under contact
+    },
+    bio: String, // Renamed from 'description' if your data uses 'bio'
+    description: String, // Add this if your data uses 'description' (or rename bio to description)
+    qualifications: [{ // Array of qualification objects
+        degree: String,
+        university: String
+    }],
+    projectHighlights: [String], // Array of image URLs
+    videos: [String], // Array of video URLs
+    servicesOffered: [{ // Array of service objects
+        service: String,
+        price: Number, // Or String if it includes currency symbol
+        timeRequired: String
+    }]
+});
+
+
 // --- View-engine setup ---
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -221,15 +261,29 @@ app.get("/html/engineers.html", (req, res) => {
 });
 
 // --- Dynamic Engineer Profile Route ---
-app.get('/engineers/:id', (req, res) => {
+// Modified to fetch from MongoDB
+app.get('/engineers/:id', async (req, res) => {
     console.log(`GET /engineers/${req.params.id} requested.`);
-    const engineer = engineers.find(e => e.engineerId === req.params.id);
-    if (!engineer) {
-        console.log(`Engineer with ID ${req.params.id} not found.`);
-        return res.status(404).send('Engineer not found');
+    try {
+        // Use the new `Engineer` model from the `engineersDbConnection`
+        // It's important to define the model AFTER the connection is established.
+        // We ensure it's defined in the engineersDbConnection.on('connected') listener,
+        // so we can just retrieve it here.
+        const Engineer = engineersDbConnection.model('Engineer');
+        console.log(`Attempting to find engineer with engineerId: ${req.params.id}`);
+        const engineer = await Engineer.findOne({ engineerId: req.params.id });
+
+        if (!engineer) {
+            console.log(`Engineer with ID ${req.params.id} not found in DB.`);
+            return res.status(404).send('Engineer not found');
+        }
+        console.log(`Successfully found engineer:`, engineer); // Log the found engineer object
+        console.log(`Rendering engineer profile for: ${engineer.name}`);
+        res.render('engineer', { engineer });
+    } catch (error) {
+        console.error("Error fetching engineer from DB:", error);
+        res.status(500).send("Error fetching engineer data.");
     }
-    console.log(`Rendering engineer profile for: ${engineer.name}`);
-    res.render('engineer', { engineer });
 });
 
 
@@ -582,20 +636,49 @@ app.post('/api/forgot-password/set-new-password', async (req, res) => {
 
 // --- Server Start and MongoDB Connection ---
 console.log("4. Attempting to start server...");
+
+// Declare global variable for the engineers database connection
+let engineersDbConnection;
+
 async function startServer() {
     try {
-        // Use an environment variable for the MongoDB URI, with a fallback for local development
+        // Main database connection (for Contactus, UserAccount, PasswordResetToken)
         const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/hrsample_local';
-
         await mongoose.connect(MONGODB_URI);
-        console.log("✅ Connection Established to MongoDB: hrsample_local (or remote)"); // Adjusted log message
+        console.log("✅ Connection Established to Main MongoDB: hrsample_local (or remote)");
+
+        // Separate database connection for engineers data
+        const MONGO_URI2 = process.env.MONGO_URI2; // Get the second URI from .env
+        if (!MONGO_URI2) {
+            throw new Error("MONGO_URI2 environment variable is not defined for engineers database.");
+        }
+
+        // Create a new connection instance for the engineers database
+        engineersDbConnection = mongoose.createConnection(MONGO_URI2);
+
+        engineersDbConnection.on('connected', () => {
+            console.log("✅ Connection Established to Engineers MongoDB: hanuramdb");
+            // Define the Engineer model on this specific connection
+            // It's important to define the model AFTER the connection is established.
+            engineersDbConnection.model('Engineer', EngineerSchema, 'engineers'); // 'engineers' is the collection name
+            console.log("Engineer model defined on engineersDbConnection.");
+        });
+
+        engineersDbConnection.on('error', (err) => {
+            console.error("❌ Error connecting to Engineers MongoDB:", err.message);
+            // Decide how to handle this error. You might want to prevent server start or just log it.
+        });
+
+        engineersDbConnection.on('disconnected', () => {
+            console.log("Engineers MongoDB connection disconnected.");
+        });
 
         // Start the Express server
         app.listen(PORT, () => {
             console.log(`✅ Server running on http://localhost:${PORT}`);
         });
     } catch (error) {
-        // Log critical error and exit if MongoDB connection fails
+        // Log critical error and exit if any MongoDB connection fails
         console.error("❌ Critical error: Server failed to start or connect to DB!", error.message);
         process.exit(1); // Exit process with failure code
     }

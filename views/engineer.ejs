@@ -11,11 +11,22 @@
 
 <body class="bg-gray-900 text-white font-sans">
 
-  <!-- Profile Card -->
+  <!-- ================== Profile Card ================== -->
   <div class="card bg-gray-800 rounded-lg shadow-xl p-6 sm:p-8 max-w-md mx-auto text-center mt-10">
-    <img src="<%= engineer.profilePictureUrl %>" alt="Engineer Photo"
-      class="w-48 h-48 object-cover rounded-full mx-auto mb-4 border-4 border-yellow-500" />
+    
+    <!-- Profile Picture -->
+    <% if (engineer.profilePictureUrl) { %>
+      <img src="<%= engineer.profilePictureUrl %>" alt="Engineer Photo"
+        class="w-48 h-48 object-cover rounded-full mx-auto mb-4 border-4 border-yellow-500" />
+    <% } else { %>
+      <img src="https://via.placeholder.com/192x192.png?text=No+Photo" alt="No Photo"
+        class="w-48 h-48 object-cover rounded-full mx-auto mb-4 border-4 border-yellow-500" />
+    <% } %>
+
+    <!-- Name -->
     <h3 class="text-2xl font-bold mb-2"><%= engineer.name %></h3>
+
+    <!-- Qualifications -->
     <h4 class="text-lg text-gray-300 mb-4">
       <% if (engineer.qualifications && engineer.qualifications.length > 0) { %>
         <% engineer.qualifications.forEach(function(q, index) { %>
@@ -25,83 +36,102 @@
         Not specified
       <% } %>
     </h4>
+
+    <!-- Contact Info -->
     <div class="space-y-2 mb-4">
       <p>
-        <a href="tel:<%= engineer.contact.phone %>" class="text-yellow-400 hover:underline">
-          <%= engineer.contact.phone %>
-        </a>
+        <% if (engineer.contact && engineer.contact.phone) { %>
+          <a href="tel:<%= engineer.contact.phone %>" class="text-yellow-400 hover:underline">
+            <%= engineer.contact.phone %>
+          </a>
+        <% } else { %>
+          Phone not available
+        <% } %>
       </p>
       <p>
-        <a href="mailto:<%= engineer.contact.email %>" class="text-yellow-400 hover:underline">
-          <%= engineer.contact.email %>
-        </a>
+        <% if (engineer.contact && engineer.contact.email) { %>
+          <a href="mailto:<%= engineer.contact.email %>" class="text-yellow-400 hover:underline">
+            <%= engineer.contact.email %>
+          </a>
+        <% } else { %>
+          Email not available
+        <% } %>
       </p>
     </div>
+
+    <!-- Description -->
     <p class="text-sm text-gray-400 max-h-64 overflow-y-auto">
-      <%= engineer.description %>
+      <% if (engineer.description) { %>
+        <%= engineer.description %>
+      <% } else { %>
+        No description available.
+      <% } %>
     </p>
   </div>
 
-  <!-- Project Highlights -->
-  <div class="p-6 sm:p-8">
-    <div class="max-w-7xl mx-auto bg-gray-800 rounded-lg shadow-xl p-6">
-      <h2 class="text-3xl font-bold text-center mb-6">Project Highlights</h2>
-      <div class="flex space-x-4 overflow-x-auto snap-x snap-mandatory">
-        <% engineer.projectHighlights.forEach(img => { %>
-          <div class="flex-shrink-0 w-64 h-48 bg-gray-700 rounded-xl overflow-hidden snap-center">
-            <img src="<%= img %>" alt="Project Image"
-              class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-              onerror="this.onerror=null;this.src='https://placehold.co/700x500/334155/e2e8f0?text=Image+Load+Error';" />
-          </div>
-        <% }); %>
+  <!-- ================== Project Highlights Section ================== -->
+  <% if (engineer.projectHighlights && engineer.projectHighlights.length > 0) { %>
+    <div class="p-6 sm:p-8">
+      <div class="max-w-7xl mx-auto bg-gray-800 rounded-lg shadow-xl p-6">
+        <h2 class="text-3xl font-bold text-center mb-6">Project Highlights</h2>
+        <div class="flex space-x-4 overflow-x-auto snap-x snap-mandatory">
+          <% engineer.projectHighlights.forEach(img => { %>
+            <div class="flex-shrink-0 w-64 h-48 bg-gray-700 rounded-xl overflow-hidden snap-center">
+              <img src="<%= img %>" alt="Project Image"
+                class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                onerror="this.onerror=null;this.src='https://placehold.co/700x500/334155/e2e8f0?text=Image+Load+Error';" />
+            </div>
+          <% }); %>
+        </div>
       </div>
     </div>
-  </div>
+  <% } %>
 
-  <!-- Videos Section -->
+  <!-- ================== Videos Section ================== -->
   <% if (engineer.videos && engineer.videos.length > 0) { %>
     <div class="p-6 sm:p-8">
       <div class="max-w-4xl mx-auto bg-gray-800 rounded-lg shadow-xl p-6">
         <h2 class="text-2xl font-bold text-center mb-4 text-white">Videos</h2>
         <div class="flex flex-wrap justify-center gap-4">
           <% engineer.videos.forEach(video => {
-            if (video.includes("youtube.com") || video.includes("youtu.be")) {
-              let videoId = null;
-              if (video.includes("youtube.com")) {
-                const parts = video.split("v=");
-                if (parts.length > 1) videoId = parts[1].split("&")[0];
-              } else if (video.includes("youtu.be")) {
-                videoId = video.split("youtu.be/")[1]?.split("?")[0];
-              }
-              const embedUrl = videoId 
-                ? `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=1` 
-                : null;
+            let videoId = null;
+            let embedUrl = null;
 
-              if (embedUrl) { %>
-                <iframe 
-                  width="300" 
-                  height="170" 
-                  src="<%= embedUrl %>" 
-                  title="YouTube video player" 
-                  class="rounded-lg"
-                  frameborder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen>
-                </iframe>
-          <% } 
-            } else { %>
+            if (video.includes("youtube.com/watch?v=")) {
+              const urlParams = new URLSearchParams(new URL(video).search);
+              videoId = urlParams.get('v');
+            } else if (video.includes("youtu.be/")) {
+              videoId = video.split("youtu.be/")[1]?.split("?")[0];
+            }
+
+            if (videoId) {
+              embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=1`;
+            }
+
+            if (embedUrl) { %>
+              <iframe
+                width="300"
+                height="170"
+                src="<%= embedUrl %>"
+                title="YouTube video player"
+                class="rounded-lg"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+              </iframe>
+            <% } else { %>
               <video controls loop muted autoplay width="300" height="170" class="rounded-lg">
                 <source src="<%= video %>" type="video/mp4">
                 Your browser does not support the video tag.
               </video>
-          <% } 
+            <% }
           }); %>
         </div>
       </div>
     </div>
   <% } %>
 
-  <!-- Services Offered -->
+  <!-- ================== Services Offered Section ================== -->
   <% if (engineer.servicesOffered && engineer.servicesOffered.length > 0) { %>
     <div class="p-6 sm:p-8">
       <div class="max-w-4xl mx-auto bg-gray-800 rounded-lg shadow-xl p-6">
@@ -136,9 +166,9 @@
     </div>
   <% } %>
 
-  <!-- Footer -->
+  <!-- ================== Footer ================== -->
   <footer class="text-center text-gray-400 py-6">
-    &copy; 2025 Hanuram Construction. All rights reserved.
+    © 2025 Hanuram Construction. All rights reserved.
   </footer>
 
 </body>
