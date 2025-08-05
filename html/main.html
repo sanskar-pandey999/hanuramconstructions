@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Engineers - Hanuram Construction</title>
+    <link rel="stylesheet" href="/engineers.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Dancing+Script:wght@400..700&family=Fjalla+One&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Permanent+Marker&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        xintegrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <header>
+        <nav id="menu">
+            <div id="logo">
+                <img src="../../static/Adobe Express - file.png" alt="Hanuram Construction Logo">
+            </div>
+            <ul>
+                <li><a class="writingone" href="../html/home.html">Home</a></li>
+                <li><a class="writingone" href="../html/about.html">About</a></li>
+                <li><a class="writingone" href="../html/services.html">Services</a></li>
+                <li><a class="writingone" href="../html/contactus.html" target="_blank">Contact</a></li>
+                <li><a id="userid" class="writingone" href="../html/login.html" target="_blank">Userid</a></li>
+            </ul>
+            <button id="mobile-menu-toggle" aria-label="Toggle Mobile Menu">
+                <i class="fa fa-bars"></i>
+            </button>
+        </nav>
+    </header>
+
+    <main id="engineers-page">
+        <section class="engineers-section" id="engineers-container">
+            <!-- Initial loading message -->
+            <div class="loading-message">
+                <h2>Loading Engineers...</h2>
+                <p>If the cards do not appear, please check your network connection or the server logs.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Hanuram Construction. All rights reserved.</p>
+    </footer>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('DOM Content Loaded. Starting data fetch...');
+        const container = document.getElementById('engineers-container');
+
+        // Function to create and append the HTML for an engineer card
+        function createEngineerCard(engineer) {
+            const cardHtml = `
+                <div class="engineer-card" data-engineer-id="${engineer.id}">
+                    <img src="${engineer.img}" alt="Engineer's Photo" class="engineer-img">
+                    <h2 class="engineer-name">${engineer.name}</h2>
+                    <a class="details-link" href="/engineers/${engineer.engineerId}">View Profile</a>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', cardHtml);
+        }
+
+        // Fetch the engineer data from the API endpoint
+        fetch('/api/main')
+            .then(response => {
+                console.log('Fetch request completed. Response status:', response.status);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(engineersData => {
+                console.log('Data successfully fetched and parsed:', engineersData);
+                container.innerHTML = '';
+                
+                if (Array.isArray(engineersData) && engineersData.length > 0) {
+                    engineersData.forEach(engineer => {
+                        createEngineerCard(engineer);
+                    });
+                } else {
+                    console.warn('Fetched data is empty or not an array.');
+                    container.innerHTML = '<p>No engineer data available to display.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching the engineer data:', error);
+                container.innerHTML = '<p>Could not load engineer data. Please check the server and try again later.</p>';
+            });
+    });
+</script>
+</body>
+</html>

@@ -12,15 +12,15 @@
 <body class="bg-gray-900 text-white font-sans">
 
   <!-- ================== Profile Card ================== -->
-  <div class="card bg-gray-800 rounded-lg shadow-xl p-6 sm:p-8 max-w-md mx-auto text-center mt-10">
+  <section class="card bg-gray-800 rounded-lg shadow-xl p-6 sm:p-8 max-w-md mx-auto text-center mt-10">
     
     <!-- Profile Picture -->
     <% if (engineer.profilePictureUrl) { %>
-      <img src="<%= engineer.profilePictureUrl %>" alt="Engineer Photo"
-        class="w-48 h-48 object-cover rounded-full mx-auto mb-4 border-4 border-yellow-500" />
+      <img src="<%= engineer.profilePictureUrl %>" alt="<%= engineer.name %>'s Profile Photo"
+           class="w-48 h-48 object-cover rounded-full mx-auto mb-4 border-4 border-yellow-500" />
     <% } else { %>
-      <img src="https://via.placeholder.com/192x192.png?text=No+Photo" alt="No Photo"
-        class="w-48 h-48 object-cover rounded-full mx-auto mb-4 border-4 border-yellow-500" />
+      <img src="https://via.placeholder.com/192x192.png?text=No+Photo" alt="No profile photo available"
+           class="w-48 h-48 object-cover rounded-full mx-auto mb-4 border-4 border-yellow-500" />
     <% } %>
 
     <!-- Name -->
@@ -28,9 +28,9 @@
 
     <!-- Qualifications -->
     <h4 class="text-lg text-gray-300 mb-4">
-      <% if (engineer.qualifications && engineer.qualifications.length > 0) { %>
-        <% engineer.qualifications.forEach(function(q, index) { %>
-          <%= q.degree %> from <%= q.university %><% if (index < engineer.qualifications.length - 1) { %>, <% } %>
+      <% if (engineer.qualifications?.length > 0) { %>
+        <% engineer.qualifications.forEach((q, index) => { %>
+          <%= q.degree %> from <%= q.university %><%= (index < engineer.qualifications.length - 1) ? ', ' : '' %>
         <% }); %>
       <% } else { %>
         Not specified
@@ -40,7 +40,7 @@
     <!-- Contact Info -->
     <div class="space-y-2 mb-4">
       <p>
-        <% if (engineer.contact && engineer.contact.phone) { %>
+        <% if (engineer.contact?.phone) { %>
           <a href="tel:<%= engineer.contact.phone %>" class="text-yellow-400 hover:underline">
             <%= engineer.contact.phone %>
           </a>
@@ -49,7 +49,7 @@
         <% } %>
       </p>
       <p>
-        <% if (engineer.contact && engineer.contact.email) { %>
+        <% if (engineer.contact?.email) { %>
           <a href="mailto:<%= engineer.contact.email %>" class="text-yellow-400 hover:underline">
             <%= engineer.contact.email %>
           </a>
@@ -61,35 +61,31 @@
 
     <!-- Description -->
     <p class="text-sm text-gray-400 max-h-64 overflow-y-auto">
-      <% if (engineer.description) { %>
-        <%= engineer.description %>
-      <% } else { %>
-        No description available.
-      <% } %>
+      <%= engineer.description || "No description available." %>
     </p>
-  </div>
+  </section>
 
   <!-- ================== Project Highlights Section ================== -->
-  <% if (engineer.projectHighlights && engineer.projectHighlights.length > 0) { %>
-    <div class="p-6 sm:p-8">
+  <% if (engineer.projectHighlights?.length > 0) { %>
+    <section class="p-6 sm:p-8">
       <div class="max-w-7xl mx-auto bg-gray-800 rounded-lg shadow-xl p-6">
         <h2 class="text-3xl font-bold text-center mb-6">Project Highlights</h2>
         <div class="flex space-x-4 overflow-x-auto snap-x snap-mandatory">
           <% engineer.projectHighlights.forEach(img => { %>
             <div class="flex-shrink-0 w-64 h-48 bg-gray-700 rounded-xl overflow-hidden snap-center">
               <img src="<%= img %>" alt="Project Image"
-                class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                onerror="this.onerror=null;this.src='https://placehold.co/700x500/334155/e2e8f0?text=Image+Load+Error';" />
+                   class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                   onerror="this.onerror=null;this.src='https://placehold.co/700x500/334155/e2e8f0?text=Image+Load+Error';" />
             </div>
           <% }); %>
         </div>
       </div>
-    </div>
+    </section>
   <% } %>
 
   <!-- ================== Videos Section ================== -->
-  <% if (engineer.videos && engineer.videos.length > 0) { %>
-    <div class="p-6 sm:p-8">
+  <% if (engineer.videos?.length > 0) { %>
+    <section class="p-6 sm:p-8">
       <div class="max-w-4xl mx-auto bg-gray-800 rounded-lg shadow-xl p-6">
         <h2 class="text-2xl font-bold text-center mb-4 text-white">Videos</h2>
         <div class="flex flex-wrap justify-center gap-4">
@@ -98,8 +94,10 @@
             let embedUrl = null;
 
             if (video.includes("youtube.com/watch?v=")) {
-              const urlParams = new URLSearchParams(new URL(video).search);
-              videoId = urlParams.get('v');
+              try {
+                const urlParams = new URLSearchParams(new URL(video).search);
+                videoId = urlParams.get('v');
+              } catch (e) {}
             } else if (video.includes("youtu.be/")) {
               videoId = video.split("youtu.be/")[1]?.split("?")[0];
             }
@@ -122,18 +120,18 @@
             <% } else { %>
               <video controls loop muted autoplay width="300" height="170" class="rounded-lg">
                 <source src="<%= video %>" type="video/mp4">
-                Your browser does not support the video tag.
+                Video cannot be played.
               </video>
             <% }
           }); %>
         </div>
       </div>
-    </div>
+    </section>
   <% } %>
 
   <!-- ================== Services Offered Section ================== -->
-  <% if (engineer.servicesOffered && engineer.servicesOffered.length > 0) { %>
-    <div class="p-6 sm:p-8">
+  <% if (engineer.servicesOffered?.length > 0) { %>
+    <section class="p-6 sm:p-8">
       <div class="max-w-4xl mx-auto bg-gray-800 rounded-lg shadow-xl p-6">
         <h2 class="text-2xl font-bold text-center mb-6 text-gray-100">Services Offered</h2>
         <div class="overflow-x-auto">
@@ -163,7 +161,7 @@
           </table>
         </div>
       </div>
-    </div>
+    </section>
   <% } %>
 
   <!-- ================== Footer ================== -->
