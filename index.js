@@ -80,7 +80,7 @@ async function startServer() {
         const mainRoutes = require('./routes/main')(Contactus);
         const authRoutes = require('./routes/auth')(UserAccount, Contactus);
         const apiRoutes = require('./routes/api')();
-        const forgotPasswordRoutes = require('./routes/forgotPassword')(UserAccount, PasswordResetToken, transporter);
+        const forgotPasswordRoutes = require('./routes/forgotpassword')(UserAccount, PasswordResetToken, transporter);
         const engineersRouter = require('./routes/engineersroutes')(localEngineersDataPath, Engineer);
 
         app.use('/', mainRoutes);
