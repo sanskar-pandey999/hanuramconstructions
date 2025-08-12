@@ -1,10 +1,10 @@
-// index.js (main file - clean version)
 require('dotenv').config();
 const express = require("express");
 const path = require("path");
 const mongoose = require('mongoose');
 const session = require('express-session');
 const nodemailer = require('nodemailer');
+const NodeCache = require("node-cache"); // Import the caching library
 
 console.log("1. Starting server setup...");
 
@@ -27,6 +27,7 @@ app.use(session({
 app.use(express.static(path.join(__dirname, "public")));
 app.use('/JAVASCRIPT', express.static(path.join(__dirname, 'JAVASCRIPT')));
 app.use('/static', express.static(path.join(__dirname, 'static')));
+
 console.log(`Static files served.`);
 
 // --- View-engine setup ---
@@ -44,18 +45,24 @@ const EngineerSchema = require('./models/Engineermodels');
 const transporter = nodemailer.createTransport({
     // ... (your nodemailer config here) ...
 });
+
 console.log("Nodemailer transporter configured.");
 
 // --- Paths ---
 const localEngineersDataPath = path.join(__dirname, 'data', 'engineers.json');
 
+// --- Caching Initialization ---
+const myCache = new NodeCache({ stdTTL: 600 }); // Initialize cache with a 10-minute expiration
+console.log("✅ In-memory cache initialized with a 10-minute TTL.");
+
 let engineersDbConnection;
-let Engineer; // detailed profiles (MongoDB hanuramdb)
+let Engineer; 
 
 console.log("4. Attempting to start server...");
 
 async function startServer() {
     try {
+        console.time('query');
         const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/hrsample_local';
         const MONGO_URI2 = process.env.MONGO_URI2;
         if (!MONGO_URI2) {
@@ -69,7 +76,7 @@ async function startServer() {
             mongoose.connect(MONGODB_URI),
             mongoose.createConnection(MONGO_URI2).asPromise()
         ]);
-
+        console.timeEnd('query');
         console.log("✅ Connected to Main MongoDB (User, Contact, etc.)");
         console.log("✅ Connected to Engineers Detailed DB: hanuramdb");
 
@@ -81,7 +88,9 @@ async function startServer() {
         const authRoutes = require('./routes/auth')(UserAccount, Contactus);
         const apiRoutes = require('./routes/api')();
         const forgotPasswordRoutes = require('./routes/forgotpassword')(UserAccount, PasswordResetToken, transporter);
-        const engineersRouter = require('./routes/engineersroutes')(localEngineersDataPath, Engineer);
+        
+        // Pass the cache instance to your routes that need it
+        const engineersRouter = require('./routes/engineersroutes')(localEngineersDataPath, Engineer, myCache);
 
         app.use('/', mainRoutes);
         app.use('/auth', authRoutes);

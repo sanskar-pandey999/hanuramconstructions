@@ -1,23 +1,22 @@
-// routes/engineersroutes.js
 const express = require("express");
 const path = require('path');
 const fs = require('fs');
+const NodeCache = require("node-cache");
 
 module.exports = function (localEngineersDataPath, Engineer) {
     const router = express.Router();
+    const myCache = new NodeCache({ stdTTL: 600 });
     let engineersData = [];
 
-    // Load the static JSON data once when the server starts
+    // Load static JSON data once
     try {
         const data = fs.readFileSync(localEngineersDataPath, 'utf8');
         engineersData = JSON.parse(data);
-        console.log("✅ Engineers card data loaded from local JSON file.");
     } catch (err) {
         console.error("❌ Error loading engineers.json:", err);
     }
 
     // API: Get all engineers (for card list fetch)
-    // This route now serves the static data from the local JSON file.
     router.get('/api/main', (req, res) => {
         try {
             res.json(engineersData);
@@ -28,16 +27,25 @@ module.exports = function (localEngineersDataPath, Engineer) {
     });
 
     // View: Render engineer detail page using engineerId
-    // This route still fetches the detailed profile from the MongoDB database.
     router.get('/:id', async (req, res) => {
         try {
             const engineerId = req.params.id;
-            const engineer = await Engineer.findOne({ engineerId: engineerId });
+            const cacheKey = `engineer-detail-${engineerId}`;
+            let engineer = myCache.get(cacheKey);
 
             if (!engineer) {
-                return res.status(404).render('404', { message: `Engineer with ID ${engineerId} not found.` });
-            }
+                // Fetch from DB if not in cache
+                const mongooseDoc = await Engineer.findOne({ engineerId: engineerId });
 
+                if (!mongooseDoc) {
+                    return res.status(404).render('404', { message: `Engineer with ID ${engineerId} not found.` });
+                }
+                
+                // Convert the Mongoose document to a plain object before caching
+                engineer = mongooseDoc.toObject();
+                myCache.set(cacheKey, engineer);
+            }
+            
             res.render('engineer', { engineer });
         } catch (err) {
             console.error("Error rendering engineer profile:", err);

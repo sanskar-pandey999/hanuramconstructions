@@ -102,23 +102,15 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // --- Mobile Menu Toggle JavaScript ---
             const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-            const navMenu = document.querySelector('#menu ul'); // Selects the <ul> inside #menu
+            const navMenu = document.querySelector('#menu ul');
 
             if (mobileMenuToggle && navMenu) {
                 mobileMenuToggle.addEventListener('click', () => {
-                    console.log('Mobile menu toggle clicked on About page!'); // For debugging
-                    navMenu.classList.toggle('active'); // Toggles 'active' class on the <ul>
-                    mobileMenuToggle.classList.toggle('active'); // Optional: Add active class to button for styling
+                    navMenu.classList.toggle('active');
+                    mobileMenuToggle.classList.toggle('active');
                 });
-            } else {
-                console.error('Mobile menu toggle or navigation menu not found on About page!');
             }
-
-            // If you want the dynamic Userid/Logout display from home.html here,
-            // you'll need to copy that entire script block below this.
-            // For now, it will just show the static "Userid" link as per your original about.html.
         });
     </script>
 
