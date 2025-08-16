@@ -18,8 +18,7 @@ const EngineerSchema = new mongoose.Schema({
         required: true
     },
     experience: {
-        type: Number,
-        required: true
+        type: Number
     },
     location: String,
     contact: {
